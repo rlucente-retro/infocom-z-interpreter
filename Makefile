@@ -1,8 +1,8 @@
 
-SHELF = ~/development/git/coco-shelf
+SHELF = $(HOME)/development/git/coco-shelf
 LWASM = $(SHELF)/bin/lwasm
 DECB = $(SHELF)/bin/decb
-STORY = ~/development/emulator/frotz/ZORK1.DAT
+STORY = $(HOME)/development/emulator/frotz/ZORK1.DAT
 
 all: zork1.dsk
 
