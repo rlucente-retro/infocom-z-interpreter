@@ -17,7 +17,7 @@ The interpreter follows the standard Z-machine architecture but is heavily optim
 
 ## Memory Organization
 
-The interpreter is designed to fit within the 64K address space:
+The interpreter is designed to fit within the 64K address space. For a complete technical breakdown, see the [Detailed Memory Map](MEMORY.md).
 
 *   **Direct Page (Page 0):** Used for the most frequently accessed Z-machine variables (Opcode, Arguments, PC, MPC, etc.).
 *   **Machine Stack:** Standard 6809 stack for subroutine calls and local state.
