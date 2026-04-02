@@ -53,6 +53,25 @@ The project is structured into multiple source files, with `cocozip.ASM` acting 
 *   `warm.ASM`: Interpreter initialization and startup.
 *   `boot.ASM`: Initial loader for the CoCo.
 
+## Building the Project
+
+### Prerequisites
+
+1.  **Tooling**: This project requires the `coco-shelf` cross-development tools (specifically `lwasm` and `decb`) available at [https://github.com/strickyak/coco-shelf](https://github.com/strickyak/coco-shelf).
+2.  **Story Files**: You need a compiled Infocom Version 3 story file (typically ending in `.DAT` or `.z3`). These files are not included in this repository but are widely available across the internet (e.g., the [IF Archive](https://www.ifarchive.org/) or other historical software repositories).
+
+### Build Steps
+
+1.  **Configure Paths**: Open the `Makefile` and update the following variables to match your local environment:
+    *   `SHELF`: The path to your local `coco-shelf` installation.
+    *   `STORY`: The path to the Version 3 story file you wish to bundle.
+2.  **Compile and Construct Disk**: Run the following command in your terminal:
+    ```bash
+    make
+    ```
+3.  **Output**: This will generate a formatted DECB disk image (e.g., `zork1.dsk`) containing the boot loader, the interpreter, and the story data, ready for use in a Color Computer emulator like XRoar or MAME.
+
+
 ## Version History
 
 *   **Version A (1984):** Initial archival.
