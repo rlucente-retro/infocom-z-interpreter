@@ -62,14 +62,15 @@ The project is structured into multiple source files, with `cocozip.ASM` acting 
 
 ### Build Steps
 
-1.  **Configure Paths**: Open the `Makefile` and update the following variables to match your local environment:
+1.  **Configure Paths**: Open the `Makefile` and update the following variables to match your local environment, or override them on the command line:
     *   `SHELF`: The path to your local `coco-shelf` installation.
     *   `STORY`: The path to the Version 3 story file you wish to bundle.
+    *   `DISK`: (Optional) The name of the output disk image (defaults to the story name with a `.dsk` extension).
 2.  **Compile and Construct Disk**: Run the following command in your terminal:
     ```bash
-    make
+    make STORY=/path/to/your/story.z3 DISK=mygame.dsk
     ```
-3.  **Output**: This will generate a formatted DECB disk image (e.g., `zork1.dsk`) containing the boot loader, the interpreter, and the story data, ready for use in a Color Computer emulator like XRoar or MAME.
+3.  **Output**: This will generate a formatted DECB disk image containing the boot loader, the interpreter, and the story data, ready for use in a Color Computer emulator like XRoar or MAME.
 
 
 ## Version History
