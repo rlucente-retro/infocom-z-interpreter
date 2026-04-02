@@ -1,6 +1,6 @@
 # Infocom Z-machine Interpreter for TRS-80 Color Computer (ZIP/6809-C)
 
-This project is a 6809 assembly language implementation of the Infocom Z-machine interpreter (ZIP) for the TRS-80 Color Computer (CoCo). It is designed to run on a 64K CoCo 2 and provides support for Version 3 Z-code games.
+This project is a 6809 assembly language implementation of the Infocom Z-machine interpreter (ZIP) for the TRS-80 Color Computer (CoCo). It is designed to run on a 64K CoCo 2 and provides full support for any Infocom Version 3 Z-code games (e.g., Zork I, II, III, Planetfall, The Witness, Deadline, etc.).
 
 ## Architecture Overview
 
@@ -8,12 +8,12 @@ The interpreter follows the standard Z-machine architecture but is heavily optim
 
 ### Core Components
 
-*   **Main Loop (`main.src`):** The central execution engine. It fetches opcodes, decodes them (0-OP, 1-OP, 2-OP, X-OP), and dispatches to specific handlers.
-*   **Paging System (`paging.src`):** A sophisticated virtual memory manager using a Least Recently Used (LRU) algorithm with timestamps. It allows the interpreter to access up to 128KB (or more) of Z-code by swapping 256-byte pages from disk into a RAM-resident buffer pool.
-*   **Z-String Handler (`zstring.src`):** Implements the complex Z-string compression and decoding logic, including support for three character sets, temporary/permanent shifts, and abbreviations (F-words).
-*   **Object & Property Handler (`objects.src`):** Manages the Z-machine's object tree and property tables, providing efficient traversal and manipulation.
-*   **I/O System (`ioprims.src`, `screen.src`):** Provides a 32-column text display, status line updates (Score/Moves or Time), and keyboard input. It includes specialized routines to bypass the CoCo's ROM for compatibility with different operating systems like Nitros9 (as seen in the provided source).
-*   **Disk System (`disk.src`):** Handles track/sector-based disk I/O for both loading Z-code blocks and performing SAVE/RESTORE operations.
+*   **Main Loop (`main.ASM`):** The central execution engine. It fetches opcodes, decodes them (0-OP, 1-OP, 2-OP, X-OP), and dispatches to specific handlers.
+*   **Paging System (`paging.ASM`):** A sophisticated virtual memory manager using a Least Recently Used (LRU) algorithm with timestamps. It allows the interpreter to access up to 128KB (or more) of Z-code by swapping 256-byte pages from disk into a RAM-resident buffer pool.
+*   **Z-String Handler (`zstring.ASM`):** Implements the complex Z-string compression and decoding logic, including support for three character sets, temporary/permanent shifts, and abbreviations (F-words).
+*   **Object & Property Handler (`objects.ASM`):** Manages the Z-machine's object tree and property tables, providing efficient traversal and manipulation.
+*   **I/O System (`ioprims.ASM`, `screen.ASM`):** Provides a 32-column text display, status line updates (Score/Moves or Time), and keyboard input. It includes specialized routines to bypass the CoCo's ROM for compatibility with different operating systems like Nitros9 (as seen in the provided source).
+*   **Disk System (`disk.ASM`):** Handles track/sector-based disk I/O for both loading Z-code blocks and performing SAVE/RESTORE operations.
 
 ## Memory Organization
 
@@ -30,30 +30,39 @@ The interpreter is designed to fit within the 64K address space:
 
 The interpreter expects the Z-code game data to be arranged on the disk in a specific format:
 
-*   **Boot Track (Track 34):** Contains the initial loader (`boot.src`).
+*   **Boot Track (Track 34):** Contains the initial loader (`boot.ASM`).
 *   **Story Data:** Starts at Track 2, Sector 1.
 *   **Save Slots:** Support for 7 save positions, each occupying 5 tracks on a separate save disk.
 
 ## Building and Files
 
-The project is structured into multiple source files, with `cocozip.src` acting as the master file that includes all other components.
+The project is structured into multiple source files, with `cocozip.ASM` acting as the master file that includes all other components.
 
-*   `zequates.src`: Z-machine constants and memory layout.
-*   `main.src`: The main interpreter loop.
-*   `mainsubs.src`: Core utility subroutines.
-*   `dispatch.src`: Opcode dispatch tables.
-*   `ops*.src`: Implementation of the various Z-machine opcodes.
-*   `read.src`: Lexical analyzer and input parser.
-*   `paging.src`: Virtual memory and LRU paging.
-*   `zstring.src`: Z-string decoding and encoding.
-*   `objects.src`: Object and property manipulation.
-*   `ioprims.src`: Low-level hardware I/O.
-*   `screen.src`: High-level display and status line management.
-*   `disk.src`: Disk I/O and Save/Restore logic.
-*   `warm.src`: Interpreter initialization and startup.
-*   `boot.src`: Initial loader for the CoCo.
+*   `zequates.ASM`: Z-machine constants and memory layout.
+*   `main.ASM`: The main interpreter loop.
+*   `mainsubs.ASM`: Core utility subroutines.
+*   `dispatch.ASM`: Opcode dispatch tables.
+*   `ops*.ASM`: Implementation of the various Z-machine opcodes.
+*   `read.ASM`: Lexical analyzer and input parser.
+*   `paging.ASM`: Virtual memory and LRU paging.
+*   `zstring.ASM`: Z-string decoding and encoding.
+*   `objects.ASM`: Object and property manipulation.
+*   `ioprims.ASM`: Low-level hardware I/O.
+*   `screen.ASM`: High-level display and status line management.
+*   `disk.ASM`: Disk I/O and Save/Restore logic.
+*   `warm.ASM`: Interpreter initialization and startup.
+*   `boot.ASM`: Initial loader for the CoCo.
 
 ## Version History
 
 *   **Version A (1984):** Initial archival.
 *   **Version C (1985):** Significant updates for OS9 compatibility and paging improvements.
+
+## Attribution
+
+The source code in this repository was originally sourced from the [infocom-zcode-terps](https://github.com/erkyrath/infocom-zcode-terps/tree/master/colorcomputer) repository maintained by Andrew Plotkin (erkyrath).
+
+This version has been:
+*   **Fully Documented**: Added comprehensive block and inline comments to explain the architectural intent and low-level 6809 assembly logic.
+*   **Modernized**: Updated assembly directives and file structures for compatibility with modern cross-development tools like `lwasm`.
+*   **Automated**: Includes a `Makefile` for bit-perfect binary reconstruction and automated disk image (`.dsk`) generation.
