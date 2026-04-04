@@ -121,9 +121,13 @@ BUFFER:	FCB	$00,$00
 ZZZ:	EQU *
 
 
-;-----------------------------------------------------------------------------
-; ROM- ROUTINES
-
+; ---------------------------------------------------------------------
+; ROM-REPLACEMENT ROUTINES (See IO.ASM and MEMORY.md for details)
+;
+; These routines (MYCHR, MYCON, DIRQSV) are functional replacements for
+; standard CoCo ROM subroutines, allowing the bootloader and 
+; interpreter to run with ROMs disabled.
+; ---------------------------------------------------------------------
 
 	; IRQ HANDLER NEEDED FOR RDYTMR
 
@@ -142,21 +146,16 @@ DIRQSV:	LDA	PIA0+3
 DRTI:	RTI
 
 
-;POLCAT
-
-
-
-
 LA7D1:	LDX	ZERO
 LA7D3:	LEAX	-1,X
 	BNE	LA7D3
 	RTS
 
-;------------------------
-; COPY OF CHROUT FROM ROM
-;------------------------
 
-;
+; ---------------------------------------------------------------------
+; MYCHR: Character Output (Replacement for CHROUT at $A002)
+; ---------------------------------------------------------------------
+
 MYCHR:	JSR	RVEC3	;HOOK INTO RAM THE BOOK SAYS (BUT WHY I ASK)
 	PSHS	B
 	LDB	DEVNUM
@@ -216,10 +215,9 @@ LA92F:	STB	,X+
 	BLS	LA92F
 	RTS
 
-;----------------------------------
-;COPY OF DISK CODE FROM ROM SOURCES
-;----------------------------------
-
+; ---------------------------------------------------------------------
+; MYCON: Disk Controller (Replacement for DSKCON at $C004)
+; ---------------------------------------------------------------------
 
 MYCON:	PSHS	U,Y,X,D		;AT $D75F IN LISTING
 	LDA	#5

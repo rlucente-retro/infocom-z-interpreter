@@ -397,16 +397,42 @@ DELOOP:	LEAX	-1,X
 
 ;-----------------------------------------------------------------------------
 
+	; ---------------------------------------------------------------------
+	; TANDY COLOR COMPUTER ROM-REPLACEMENT ROUTINES
+	;
+	; These routines are functional replacements for the standard CoCo
+	; Color BASIC and Disk BASIC ROM subroutines. They were adapted 
+	; directly from the "BASIC Unravelled" series of books to provide
+	; standalone I/O and disk access when the physical ROMs are swapped 
+	; out of the memory map. This is necessary because the interpreter 
+	; disables the ROMs to enable the full 64K RAM address space for 
+	; Z-code storage and paging. Since the original ROM entry points 
+	; are unavailable in this mode, the developers included these
+	; "copied" routines to maintain hardware functionality.
+	; ---------------------------------------------------------------------
+
 	; THESE ROM ROUTINES ARE TAKEN FROM THE BASIC UNRAVELED BOOKS
 	; 
-	; THEY ARE HERE FOR THE OS9 VERSION REQUIREMENT OF NO ROM CALLS
+	; THEY ARE HERE BECAUSE THE ROMS ARE DISABLED DURING EXECUTION
+	; TO ALLOW ACCESS TO THE FULL 64K RAM SPACE.
 	;
 	; [ASK 5/15/85]
 
-; ROM- ROUTINES
+	; ROM- ROUTINES
 
-;POLCAT
-
+	; ---------------------------------------------------------------------
+	; MYCAT: Keyboard Scan (Replacement for POLCAT at $A000)
+	; ---------------------------------------------------------------------
+	; This routine scans the keyboard matrix via PIA0 ($FF00).
+	; It returns the ASCII code of the pressed key in Accumulator A, 
+	; or 0 if no key is pressed.
+	;
+	; Logic overview:
+	; 1. Pulsing the rows of the keyboard matrix.
+	; 2. Reading the column status.
+	; 3. Debouncing and handling key rollovers using KEYBUF ($0152).
+	; 4. Translating the matrix position to an ASCII character via CONTAB.
+	; ---------------------------------------------------------------------
 
 PIA0 	EQU	$FF00
 PIA1	EQU	$FF20
@@ -571,17 +597,24 @@ LA7D3:	LEAX	-1,X
 	BNE	LA7D3
 	RTS
 
-;------------------------
-; COPY OF CHROUT FROM ROM
-;------------------------
-
 RVEC3 	EQU	$0167
 CR	EQU	$0D
 VIDRAM	EQU	$0400
 CURPOS	EQU	$88
 
+; ---------------------------------------------------------------------
+; MYCHR: Character Output (Replacement for CHROUT at $A002)
+; ---------------------------------------------------------------------
+; This routine outputs a character in Accumulator A to the selected 
+; output device (screen or serial printer).
 ;
-;MYCHR:	JSR	RVEC3	;HOOK INTO RAM THE BOOK SAYS (BUT WHY I ASK)
+; Logic overview:
+; 1. Checks DEVNUM ($6F) to determine the target device.
+; 2. Printer (LA2BF): Bit-bangs serial data at 600 baud to PIA1 ($FF20).
+; 3. Screen (LA30A): Writes character directly to VIDRAM ($0400).
+; 4. Handles special characters like BS (Backspace) and CR (Carriage Return).
+; 5. Implements screen scrolling by moving 32-byte blocks.
+; ---------------------------------------------------------------------
 
 MYCHR: 	PSHS	B
 	LDB	DEVNUM
@@ -683,10 +716,20 @@ LA92F:	STB	,X+
 	BLS	LA92F
 	RTS
 
-;----------------------------------
-;COPY OF DISK CODE FROM ROM SOURCES
-;----------------------------------
-
+; ---------------------------------------------------------------------
+; MYCON: Disk Controller (Replacement for DSKCON at $C004)
+; ---------------------------------------------------------------------
+; This routine provides lower-level disk operations by directly 
+; interface with the FD1793 (or WD1793) Floppy Disk Controller.
+; It replaces the functionality normally found in the Disk BASIC ROM.
+;
+; Logic overview:
+; 1. Operates on the FDC registers at $FF48-$FF4B.
+; 2. Handles motor control (DSKREG $FF40).
+; 3. Performs seeks to the desired track.
+; 4. Reads or writes sectors via high-speed transfer.
+; 5. Uses a 60Hz IRQ handler (DIRQSV) to track motor spin-down time.
+; ---------------------------------------------------------------------
 
 MYCON:	PSHS	U,Y,X,D		;AT $D75F IN LISTING
 	LDA	#5

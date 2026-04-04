@@ -1,10 +1,27 @@
 
 
 
-DSKCON	EQU	$C004		; CONTAINS DISK ACCESS VECTOR
-DCB	EQU	$EA  		; ADDRESS OF DCB
+DSKCON	EQU	$C004		; DISK BASIC ENTRY POINT FOR DISK CONTROL
+DCB	EQU	$EA  		; DEVICE CONTROL BLOCK (COCO BASIC CONVENTION)
 MOTOR	EQU	$FF40		; DRIVE MOTOR ON/OFF SWITCH
 BLOCK1	EQU	37		; 1ST Z-CODE BLOCK (TRACK 2, SECTOR 1)
+
+	; ---------------------------------------------------------------------
+	; DISK ACCESS MECHANISM
+	;
+	; This interpreter can use either the standard Disk BASIC ROM vector
+	; (DSKCON at $C004) or a standalone replacement (MYCON). 
+	; Using MYCON (defined in IO.ASM) allows the interpreter to function
+	; without the Disk BASIC ROM being banked in, ensuring compatibility
+	; with systems that use the full 64K RAM.
+	;
+	; The Disk Control Block (DCB) at $EA is used to pass parameters:
+	; $EA: Drive number (0-3)
+	; $EB: Track number (0-34)
+	; $EC: Sector number (1-18)
+	; $ED: Buffer address (2 bytes)
+	; $F0: Status byte (returned from operation)
+	; ---------------------------------------------------------------------
 
 	; ------------------------
 	; READ A Z-BLOCK FROM DISK

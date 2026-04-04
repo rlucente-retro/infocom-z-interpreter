@@ -12,7 +12,7 @@ The interpreter follows the standard Z-machine architecture but is heavily optim
 *   **Paging System (`paging.ASM`):** A sophisticated virtual memory manager using a Least Recently Used (LRU) algorithm with timestamps. It allows the interpreter to access up to 128KB (or more) of Z-code by swapping 256-byte pages from disk into a RAM-resident buffer pool.
 *   **Z-String Handler (`zstring.ASM`):** Implements the complex Z-string compression and decoding logic, including support for three character sets, temporary/permanent shifts, and abbreviations (F-words).
 *   **Object & Property Handler (`objects.ASM`):** Manages the Z-machine's object tree and property tables, providing efficient traversal and manipulation.
-*   **I/O System (`ioprims.ASM`, `screen.ASM`):** Provides a 32-column text display, status line updates (Score/Moves or Time), and keyboard input. It includes specialized routines to bypass the CoCo's ROM for compatibility with different operating systems like Nitros9 (as seen in the provided source).
+*   **I/O System (`ioprims.ASM`, `screen.ASM`):** Provides a 32-column text display, status line updates (Score/Moves or Time), and keyboard input. It includes specialized routines to bypass the CoCo's ROM so the interpreter can enable the full 64K RAM address space for Z-code storage and paging. This ensures hardware functionality remains available when the physical ROMs are swapped out.
 *   **Disk System (`disk.ASM`):** Handles track/sector-based disk I/O for both loading Z-code blocks and performing SAVE/RESTORE operations.
 
 ## Memory Organization

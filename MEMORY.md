@@ -32,11 +32,26 @@ These addresses are used for interacting with the Color Computer hardware and RO
 |-----------|-----------|-------------------------------------------------|
 | `$006F`   | `DEVNUM`  | I/O Device Number ($00=Screen, $FE=Printer)     |
 | `$0088`   | `CURSOR`  | Absolute cursor address                         |
+| `$00EA`   | `DCB`     | Disk Control Block (shared with ROM routines)   |
+| `$0152`   | `KEYBUF`  | Keyboard rollover/repeat buffer                 |
 | `$A000`   | `POLCAT`  | ROM Keycode Fetch Vector                        |
 | `$A002`   | `CHROUT`  | ROM Character Output Vector                     |
-| `$FF03`   | `INT60`   | 60Hz Interrupt Control                          |
+| `$C004`   | `DSKCON`  | Disk BASIC ROM Entry Point                      |
+| `$FF00`   | `PIA0`    | Peripheral Interface Adapter (Keyboard/Joysticks)|
+| `$FF20`   | `PIA1`    | Peripheral Interface Adapter (Printer/DAC/Sound)|
+| `$FF40`   | `DSKREG`  | Disk Controller Drive/Motor Control Register    |
+| `$FF48`   | `FDCREG`  | WD1793 Floppy Disk Controller Status Register   |
 | `$FFDE`   | `ROMON`   | ROM Enable (Bank Switch)                        |
 | `$FFDF`   | `ROMOFF`  | ROM Disable (Bank Switch)                       |
+
+## ROM Replacement Routines
+
+To maximize available RAM for Z-code storage and the paging system, the interpreter disables the physical ROMs to gain access to the full 64K address space. This makes the standard ROM entry points ($A000, $C004, etc.) unavailable. To maintain hardware functionality, the interpreter includes its own implementations of several standard CoCo ROM routines, adapted from the "BASIC Unravelled" series:
+
+- **`MYCAT` (in `IO.ASM`):** Replaces `POLCAT` ($A000). Scans the keyboard matrix via `PIA0` ($FF00) and handles debouncing and rollover using `KEYBUF` ($0152).
+- **`MYCHR` (in `IO.ASM`):** Replaces `CHROUT` ($A002). Handles character output to the 32x16 text screen (`$0400`) or the serial printer via `PIA1` ($FF20).
+- **`MYCON` (in `IO.ASM`):** Replaces `DSKCON` ($C004). Directly controls the WD1793 FDC via `FDCREG` ($FF48) for sector-level disk access.
+- **`DIRQSV` (in `IO.ASM`/`BOOT.ASM`):** A custom IRQ handler that manages the 60Hz interrupt and disk motor timeout (`RDYTMR`).
 
 ## Direct Page (DP) Variables
 
