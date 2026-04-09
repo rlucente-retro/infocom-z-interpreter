@@ -1,13 +1,14 @@
 
 
 
+        INCLUDE "COCO_EQ.ASM"
+
         SETDP   0
         ORG     ZIP             ; START OF EXECUTABLE CODE
 
         CLRA                    ; USE PAGE ZERO
         TFR     A,DP            ; AS THE DIRECT PAGE
 
-IRQVEC  EQU     $10C
 
         LDX     #DIRQSV         ;SET VECTOR
         STX     IRQVEC+1

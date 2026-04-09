@@ -1,11 +1,12 @@
 
 
 
+        INCLUDE "COCO_EQ.ASM"
+
 SCREEN  EQU     $400            ; START OF SCREEN RAM
 ENDSCR  EQU     $600            ; END OF SCREEN RAM
 POLCAT  EQU     $A000           ; KEYCODE FETCH VECTOR
 CHROUT  EQU     $A002           ; PRINT CHAR TO DEVICE
-DEVNUM  EQU     $6F             ; $00 = SCREEN, $FE = PRINTER
 CURSOR  EQU     $88             ; ABSOLUTE CURSOR ADDRESS
 INT60   EQU     $FF03           ; 60HZ INTERRUPT CONTROL
 ROMON   EQU     $FFDE           ; ROM ENABLE
@@ -13,8 +14,6 @@ ROMOFF  EQU     $FFDF           ; ROM DISABLE
 MEMTOP  EQU     $FE             ; TOP PAGE OF AVAILABLE RAM
 
 EOL     EQU     $0D             ; END-OF-LINE CHARACTER
-BS      EQU     $08             ; BACKSPACE CHARACTER
-SPACE   EQU     $20             ; SPACE CHARACTER
 CDURAT  EQU     5               ; DURATION OF KEYCLICKS
 CFREQ   EQU     25              ; FREQUENCY OF KEYCLICKS
 BDURAT  EQU     10              ; DURATION OF RAZZ
@@ -434,7 +433,6 @@ DELOOP: LEAX    -1,X
         ; 4. Translating the matrix position to an ASCII character via CONTAB.
         ; ---------------------------------------------------------------------
 
-PIA0    EQU     $FF00
 PIA1    EQU     $FF20
 DA      EQU     $FF20
 
@@ -442,27 +440,6 @@ LPTPOS  EQU     $9C
 LPTWID  EQU     $9B
 LPTBTD  EQU     $95
 LPTLND  EQU     $97
-
-KEYBUF  EQU     $0152
-CASFLG  EQU     $011A
-DEBVAL  EQU     $011B
-
-
-RDYTMR  EQU     $985
-DCDRV   EQU     $EB
-DRGRAM  EQU     $986
-DCTRK   EQU     $EC
-DSKREG  EQU     $FF40
-DCSTA   EQU     $F0
-DCOPC   EQU     $EA
-DR0TRK  EQU     $97E
-FDCREG  EQU     $FF48
-ZERO    EQU     $8A
-DSEC    EQU     $ED
-DNMIVC  EQU     $983
-DCBPT   EQU     $EE
-NMIFLG  EQU     $982
-SKP2    EQU     $8C
 
 
         ; IRQ HANDLER NEEDED FOR RDYTMR
@@ -596,11 +573,6 @@ LA7D1:  LDX     ZERO
 LA7D3:  LEAX    -1,X
         BNE     LA7D3
         RTS
-
-RVEC3   EQU     $0167
-CR      EQU     $0D
-VIDRAM  EQU     $0400
-CURPOS  EQU     $88
 
 ; ---------------------------------------------------------------------
 ; MYCHR: Character Output (Replacement for CHROUT at $A002)

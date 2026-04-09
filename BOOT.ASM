@@ -5,40 +5,7 @@
         ; AND IS LOADED BY CO-CO WITH 'DOS' COMMAND
         ;------------------------------------------
 
-
-PIA0    EQU     $FF00
-KEYBUF  EQU     $0152
-CASFLG  EQU     $011A
-DEBVAL  EQU     $011B
-
-DEVNUM  EQU     $6F
-BS      EQU     $08
-SPACE   EQU     $20
-
-IRQVEC  EQU     $10C
-RDYTMR  EQU     $985
-DCDRV   EQU     $EB
-DRGRAM  EQU     $986
-DCTRK   EQU     $EC
-DSKREG  EQU     $FF40
-DCSTA   EQU     $F0
-DCOPC   EQU     $EA
-DR0TRK  EQU     $97E
-FDCREG  EQU     $FF48
-ZERO    EQU     $8A
-DSEC    EQU     $ED
-DNMIVC  EQU     $983
-DCBPT   EQU     $EE
-NMIFLG  EQU     $982
-SKP2    EQU     $8C
-
-DCB     EQU     $EA
-
-
-RVEC3   EQU     $0167
-CR      EQU     $0D
-VIDRAM  EQU     $0400
-CURPOS  EQU     $88
+        INCLUDE "COCO_EQ.ASM"
 
         ; EQUATES
 

@@ -1,9 +1,9 @@
 
 
 
+        INCLUDE "COCO_EQ.ASM"
+
 DSKCON  EQU     $C004           ; DISK BASIC ENTRY POINT FOR DISK CONTROL
-DCB     EQU     $EA             ; DEVICE CONTROL BLOCK (COCO BASIC CONVENTION)
-MOTOR   EQU     $FF40           ; DRIVE MOTOR ON/OFF SWITCH
 BLOCK1  EQU     37              ; 1ST Z-CODE BLOCK (TRACK 2, SECTOR 1)
 
         ; ---------------------------------------------------------------------
