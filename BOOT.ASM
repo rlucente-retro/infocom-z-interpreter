@@ -14,7 +14,9 @@ ZEND    EQU     $3000+BUG
 
         ;---------------------------------------------------------
         ; BOOT SECTOR ENTRY POINT
-        ; The 'DOS' command loads this sector to $2600 and JMPs here.
+        ; The 'DOS' command loads all 18 sectors in track 34 to 
+        ; $2600 and JMPs here. Total bytes read are 4.5k but code
+        ; is far less than that.
         ;---------------------------------------------------------
 
         ORG     $2600
@@ -25,8 +27,8 @@ MOVE:   LDX     #00             ; SET UP TO MOVE BOOT CODE OUT OF WAY OF ZIP
 MOVLP:  LDD     HERE,X
         STD     THERE,X
         LEAX    2,X
-        CMPX    #$800
-        BLO     MOVLP
+        CMPX    #$800           ; currently 2k out of 4.5k is copied, but 
+        BLO     MOVLP           ; boot code is much shorter than that anyway
         JMP     RUN
 
 HERE:   EQU *
