@@ -51,7 +51,7 @@ The project is structured into multiple source files, with `cocozip.ASM` acting 
 *   `screen.ASM`: High-level display and status line management.
 *   `disk.ASM`: Disk I/O and Save/Restore logic.
 *   `warm.ASM`: Interpreter initialization and startup.
-*   `boot.ASM`: Initial loader for the CoCo.
+*   `boot.ASM`: Initial loader for the CoCo. This resides on the boot track (Track 34) and is responsible for loading the ZIP into RAM and starting it at `$1100` (the start of `warm.ASM`). Note that `boot.ASM` contains temporary versions of the ROM-replacement routines (`MYCON`, `MYCHR`, `DIRQSV`) which are only used during the boot process. Once the ZIP is loaded, these routines are redefined in `io.ASM` with full interpreter-level support.
 
 ## Building the Project
 

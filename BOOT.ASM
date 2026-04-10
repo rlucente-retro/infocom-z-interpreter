@@ -16,7 +16,9 @@ ZEND    EQU     $3000+BUG
         ; BOOT SECTOR ENTRY POINT
         ; The 'DOS' command loads all 18 sectors in track 34 to 
         ; $2600 and JMPs here. Total bytes read are 4.5k but code
-        ; is far less than that.
+        ; is far less than that. The loader is at $5000 and it
+        ; then loads the Z-interpreter to address $1100 and jumps
+        ; there to start the interpreter and the game.
         ;---------------------------------------------------------
 
         ORG     $2600
@@ -39,7 +41,10 @@ THERE:  EQU *
 
         ;---------------------------------------------------------
         ; MAIN LOADER LOOP
-        ; Relocated to $5000. Loads ZIP from Track 1 into $1100.
+        ; Relocated to $5000. Loads Z-interpeter program (ZIP)
+        ; from Track 0 into $1100. The Z-interpreter is on the
+        ; first two tracks of the disk, track 0, sectors 1-18, and
+        ; track 1, sectors 1-13, totaling just under 8k
         ;---------------------------------------------------------
 
 RUN:    LDX     #DIRQSV         ; SET SYSTEM IRQ VECTOR
@@ -95,11 +100,16 @@ ZZZ:    EQU *
 
 
 ; ---------------------------------------------------------------------
-; ROM-REPLACEMENT ROUTINES (See IO.ASM and MEMORY.md for details)
+; TEMPORARY BOOT-ONLY ROM-REPLACEMENT ROUTINES
 ;
 ; These routines (MYCHR, MYCON, DIRQSV) are functional replacements for
-; standard CoCo ROM subroutines, allowing the bootloader and 
-; interpreter to run with ROMs disabled.
+; standard CoCo ROM subroutines, allowing the bootloader to run with 
+; ROMs disabled while loading the Z-Interpreter Program (ZIP).
+;
+; IMPORTANT: These are TEMPORARY routines used only during the boot 
+; process. Once the ZIP is loaded and starts at $1100 (WARM.ASM), 
+; these routines are REDEFINED in IO.ASM with full interpreter-level
+; functionality.
 ; ---------------------------------------------------------------------
 
         ;---------------------------------------------------------

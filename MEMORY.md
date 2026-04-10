@@ -49,9 +49,9 @@ These addresses are used for interacting with the Color Computer hardware and RO
 To maximize available RAM for Z-code storage and the paging system, the interpreter disables the physical ROMs to gain access to the full 64K address space. This makes the standard ROM entry points ($A000, $C004, etc.) unavailable. To maintain hardware functionality, the interpreter includes its own implementations of several standard CoCo ROM routines, adapted from the "BASIC Unravelled" series:
 
 - **`MYCAT` (in `IO.ASM`):** Replaces `POLCAT` ($A000). Scans the keyboard matrix via `PIA0` ($FF00) and handles debouncing and rollover using `KEYBUF` ($0152).
-- **`MYCHR` (in `IO.ASM`):** Replaces `CHROUT` ($A002). Handles character output to the 32x16 text screen (`$0400`) or the serial printer via `PIA1` ($FF20).
-- **`MYCON` (in `IO.ASM`):** Replaces `DSKCON` ($C004). Directly controls the WD1793 FDC via `FDCREG` ($FF48) for sector-level disk access.
-- **`DIRQSV` (in `IO.ASM`/`BOOT.ASM`):** A custom IRQ handler that manages the 60Hz interrupt and disk motor timeout (`RDYTMR`).
+- **`MYCHR` (in `IO.ASM`):** Replaces `CHROUT` ($A002). Handles character output to the 32x16 text screen (`$0400`) or the serial printer via `PIA1` ($FF20). (Note: A temporary version of `MYCHR` is used in `BOOT.ASM` during initial load).
+- **`MYCON` (in `IO.ASM`):** Replaces `DSKCON` ($C004). Directly controls the WD1793 FDC via `FDCREG` ($FF48) for sector-level disk access. (Note: A temporary version of `MYCON` is used in `BOOT.ASM` during initial load).
+- **`DIRQSV` (in `IO.ASM`/`BOOT.ASM`):** A custom IRQ handler that manages the 60Hz interrupt and disk motor timeout (`RDYTMR`). The version in `BOOT.ASM` is used for initial ZIP loading, after which it is replaced by the version in `IO.ASM`.
 
 ## Direct Page (DP) Variables
 
