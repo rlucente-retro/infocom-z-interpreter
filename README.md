@@ -86,6 +86,7 @@ Additionally, John Linville's series of articles on the RetroTinker blog provide
 * [Building CoCo Games with Inform](https://retrotinker.blogspot.com/2017/11/building-coco-games-with-inform.html)
 * [Using Infocom's ZIP on the CoCo](https://retrotinker.blogspot.com/2017/11/using-infocoms-zip-on-coco.html)
 * [Building Infocom Disk Images for the CoCo](https://retrotinker.blogspot.com/2017/11/building-infocom-disk-images-for-coco.html)
+* [Z Interpreter Source for CoCo Recovered](https://retrotinker.blogspot.com/2018/02/z-intepreter-source-for-coco-recovered.html)
 
 This version has been:
 *   **Fully Documented**: Added comprehensive block and inline comments to explain the architectural intent and low-level 6809 assembly logic.
